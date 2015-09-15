@@ -1,7 +1,7 @@
 package org.usp.sfv.reader;
 
 import org.usp.sfv.domain.Process;
-import org.usp.sfv.domain.Relationship;
+import org.usp.sfv.domain.Transition;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,7 +10,9 @@ import java.nio.file.*;
 import java.util.stream.Stream;
 
 /**
- * App: bissimulation User: caiobos Date: 9/11/15
+ * App: bissimulation
+ * User: caiobos
+ * Date: 9/11/15
  */
 public class LTSReader {
 
@@ -19,26 +21,37 @@ public class LTSReader {
     private static final Integer STATE_TO = 2;
     private static final Integer EVENT = 1;
 
+    private static LTSReader ourInstance = new LTSReader();
+
+    public static LTSReader getInstance() {
+        return ourInstance;
+    }
+
+    private LTSReader() {
+    }
+
     public Process read(String fileName) throws URISyntaxException {
         URI file = ClassLoader.getSystemResource(fileName).toURI();
         Path path = Paths.get(file);
         try {
             Stream<String> lines = Files.lines(path);
             Process process = new Process();
-            lines.forEach(s -> process.addRelationship(readLine(s)));
+            lines.forEach(s -> process.addTransition(readLine(s)));
             System.out.println(process);
+            return process;
         }
         catch (IOException ex) {
+            System.out.println("Error when reading the file="+fileName);
         }
-        return new Process();
+        return null;
     }
 
-    private Relationship readLine(String line) {
+    private Transition readLine(String line) {
         String[] pieces = line.split(SEPARATOR);
         if (pieces.length != 3) {
             throw new IllegalArgumentException("LTS Format error at line=" + line);
         }
-        Relationship r = new Relationship(pieces[STATE_FROM], pieces[STATE_TO], pieces[EVENT]);
+        Transition r = new Transition(pieces[STATE_FROM], pieces[EVENT], pieces[STATE_TO]);
         System.out.println(r);
         return r;
     }

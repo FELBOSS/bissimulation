@@ -3,37 +3,69 @@ package org.usp.sfv.domain;
 import java.util.*;
 
 /**
- * App: bissimulation
- * User: caiobos
- * Date: 9/11/15
+ * App: bissimulation User: caiobos Date: 9/11/15
  */
 public class Process {
 
+    private String s0 = null;
     private Set<String> states = new HashSet<>();
     private Set<String> events = new HashSet<>();
 
+    private Map<String, HashSet<String>> eventFromMap = new HashMap<>();
+    private List<Transition> transitions = new ArrayList<>();
 
-    public void addRelationship(Relationship r){
-        states.add(r.getStateFrom());
-        states.add(r.getStateTo());
-        events.add(r.getEvent());
+    public void addTransition(Transition t) {
+        transitions.add(t);
+        states.add(t.getStateFrom());
+        states.add(t.getStateTo());
+        events.add(t.getEvent());
+        if (s0 == null) s0 = t.getStateFrom();
+
+
+        //EVENT FROM MAP
+        HashSet<String> statesFrom =  eventFromMap.get(t.getEvent());
+        if(statesFrom==null){
+            statesFrom = new HashSet<>();
+        }
+        statesFrom.add(t.getStateFrom());
+        eventFromMap.put(t.getEvent(), statesFrom);
+
 
     }
 
-    public void addState(String state){
-        states.add(state);
+    public String getS0() {
+        return s0;
     }
 
-    public void addEvent(String action){
-        events.add(action);
+    public Set<String> getStates() {
+        return states;
+    }
+
+    public Set<String> getEvents() {
+        return events;
+    }
+
+    public List<Transition> getTransitions() {
+        return transitions;
+    }
+
+    public Map<String, HashSet<String>> getEventFromMap() {
+        return eventFromMap;
+    }
+
+    public void setEventFromMap(Map<String, HashSet<String>> eventFromMap) {
+        this.eventFromMap = eventFromMap;
     }
 
     @Override
-    public String
-    toString() {
+    public String toString() {
         return "Process{" +
-            "states=" + states +
+            "s0='" + s0 + '\'' +
+            ", states=" + states +
             ", events=" + events +
+            ", eventFromMap=" + eventFromMap +
+            ", transitions=" + transitions +
             '}';
     }
+
 }

@@ -5,13 +5,13 @@ package org.usp.sfv.domain;
  * User: caiobos
  * Date: 9/11/15
  */
-public class Relationship {
+public class Transition {
 
     private String stateFrom;
     private String stateTo;
     private String event;
 
-    public Relationship(String stateFrom, String stateTo, String event) {
+    public Transition(String stateFrom, String event, String stateTo) {
         this.stateFrom = stateFrom;
         this.stateTo = stateTo;
         this.event = event;
@@ -43,7 +43,7 @@ public class Relationship {
 
     @Override
     public String toString() {
-        return "Relationship{" +
+        return "Transition{" +
             "stateFrom='" + stateFrom + '\'' +
             ", stateTo='" + stateTo + '\'' +
             ", event='" + event + '\'' +
