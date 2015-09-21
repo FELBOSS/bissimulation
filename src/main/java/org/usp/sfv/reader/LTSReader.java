@@ -37,7 +37,7 @@ public class LTSReader {
             Stream<String> lines = Files.lines(path);
             Process process = new Process();
             lines.forEach(s -> process.addTransition(readLine(s)));
-            System.out.println(process);
+            System.out.println("PROCESS="+process);
             return process;
         }
         catch (IOException ex) {
@@ -52,7 +52,7 @@ public class LTSReader {
             throw new IllegalArgumentException("LTS Format error at line=" + line);
         }
         Transition r = new Transition(pieces[STATE_FROM], pieces[EVENT], pieces[STATE_TO]);
-        System.out.println(r);
+        //System.out.println(r);
         return r;
     }
 }

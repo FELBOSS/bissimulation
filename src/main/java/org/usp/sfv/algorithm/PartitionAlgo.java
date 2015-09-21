@@ -2,6 +2,7 @@ package org.usp.sfv.algorithm;
 
 import org.usp.sfv.domain.*;
 import org.usp.sfv.domain.Process;
+import org.usp.sfv.domain.partition.Partition;
 
 import java.util.*;
 
@@ -12,15 +13,9 @@ import java.util.*;
  */
 public class PartitionAlgo {
 
-    //private static PartitionAlgo ourInstance = new PartitionAlgo();
-
     private Process process = null;
     private List<Partition> W = new ArrayList<>();
     private Partition partition = new Partition();
-
-//    public static PartitionAlgo getInstance() {
-//        return ourInstance;
-//    }
 
     public PartitionAlgo(Process process) {
         this.process = process;

@@ -23,6 +23,11 @@ public class Block {
         this.states = states;
     }
 
+    public boolean notEmpty() {
+        return states.size()>0;
+    }
+
+
     @Override
     public String toString() {
         return "Block{" +

@@ -1,4 +1,6 @@
-package org.usp.sfv.domain;
+package org.usp.sfv.domain.partition;
+
+import org.usp.sfv.domain.Block;
 
 import java.util.HashSet;
 import java.util.Set;

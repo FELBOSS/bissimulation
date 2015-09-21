@@ -2,7 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.usp.sfv.algorithm.PartitionAlgo;
 import org.usp.sfv.domain.Block;
-import org.usp.sfv.domain.Partition;
+import org.usp.sfv.domain.partition.Partition;
 
 import java.util.HashSet;
 
