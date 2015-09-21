@@ -22,12 +22,10 @@ public class Main {
         Process p2 = LTSReader.getInstance().read(LTS_FILE2);
 
 
-        //partitionAlgo(p1, p2);
+        partitionAlgo(p1, p2);
         flyAlgo(p1, p2);
 
-
         System.out.println("-- Bissimulation Ended");
-
 
     }
 
@@ -39,16 +37,10 @@ public class Main {
     }
 
     public static void partitionAlgo(Process p1, Process p2){
-        System.out.println("-- Start P1");
-        PartitionAlgo partitionAlgo1 = new PartitionAlgo(p1);
+        System.out.println("-- Start partitionAlgo");
+        PartitionAlgo partitionAlgo1 = new PartitionAlgo(p1,p2);
         partitionAlgo1.calculate();
-        System.out.println("-- End P1");
-
-
-        System.out.println("-- Start P2");
-        PartitionAlgo partitionAlgo2 = new PartitionAlgo(p2);
-        partitionAlgo2.calculate();
-        System.out.println("-- End P2");
+        System.out.println("-- End partitionAlgo");
 
     }
 

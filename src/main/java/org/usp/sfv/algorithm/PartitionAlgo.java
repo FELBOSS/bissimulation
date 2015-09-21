@@ -2,7 +2,7 @@ package org.usp.sfv.algorithm;
 
 import org.usp.sfv.domain.*;
 import org.usp.sfv.domain.Process;
-import org.usp.sfv.domain.partition.Partition;
+import org.usp.sfv.domain.Partition;
 
 import java.util.*;
 
@@ -13,17 +13,40 @@ import java.util.*;
  */
 public class PartitionAlgo {
 
-    private Process process = null;
-    private List<Partition> W = new ArrayList<>();
-    private Partition partition = new Partition();
+    private Process p1 = null;
+    private Process p2 = null;
 
-    public PartitionAlgo(Process process) {
-        this.process = process;
+    private List<Partition> W = new ArrayList<>();
+    //private Partition partition = new Partition();
+
+    public PartitionAlgo(Process p1, Process p2) {
+        this.p1 = p1;
+        this.p2 = p2;
     }
 
-    public void calculate() {
+    public boolean calculate(){
+        System.out.println("-- Start partitionAlgo P1");
+        Partition partition1 = calculateForProcess(p1);
+        System.out.println("-- End partitionAlgo P1");
+
+        System.out.println("-- Start partitionAlgo P2");
+        Partition partition2 = calculateForProcess(p2);
+        System.out.println("-- End partitionAlgo P2");
+
+        if(partition1.getBlocks().size() == partition2.getBlocks().size()) {
+            System.out.println("RESULT=TRUE, EQUIVALENTS");
+            return true;
+        }
+
+        System.out.println("RESULT=FALSE, NOT EQUIVALENTS");
+        return false;
+    }
+
+
+    public Partition calculateForProcess(Process process) {
         System.out.println("----- ALGORITHM STEP 1");
 
+        Partition partition = new Partition();
         Block b0 = new Block(process.getStates());
         partition.addBlock(b0);
 
@@ -34,27 +57,14 @@ public class PartitionAlgo {
             Set<String> fromStates = process.getEventFromMap().get(event);
             partition = doPartition(partition, new Block(fromStates));
 
-
-
-            //partition by event
-
-//            Set<String> complement = findComplement(b0, fromStates);
-//
-//
-//            partition.addBlock(new Block(fromStates));
-//            partition.addBlock(new Block(complement));
-
-            //W.add(new Block(fromStates));
-//            W.add(new Block(complement));
             System.out.println("calculate after event="+event+" partition=" + partition);
             System.out.println("W="+ W);
         }
 
-        System.out.println("----- ALGORITHM STEP 2");
-
 
 
         System.out.println("----- ALGORITHM END");
+        return partition;
     }
 
     public Partition doPartition(Partition partition, Block fromStates) {

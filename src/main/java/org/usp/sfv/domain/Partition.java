@@ -1,4 +1,4 @@
-package org.usp.sfv.domain.partition;
+package org.usp.sfv.domain;
 
 import org.usp.sfv.domain.Block;
 

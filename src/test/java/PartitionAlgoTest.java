@@ -2,7 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.usp.sfv.algorithm.PartitionAlgo;
 import org.usp.sfv.domain.Block;
-import org.usp.sfv.domain.partition.Partition;
+import org.usp.sfv.domain.Partition;
 
 import java.util.HashSet;
 
@@ -26,7 +26,7 @@ public class PartitionAlgoTest {
         b.add("4");
         Block bb = new Block(b);
 
-        PartitionAlgo partitionAlgo = new PartitionAlgo(null);
+        PartitionAlgo partitionAlgo = new PartitionAlgo(null, null);
         partitionAlgo.findComplement(ba, bb);
     }
 
@@ -44,7 +44,7 @@ public class PartitionAlgoTest {
         b.add("4");
         Block bb = new Block(b);
 
-        PartitionAlgo partitionAlgo = new PartitionAlgo(null);
+        PartitionAlgo partitionAlgo = new PartitionAlgo(null, null);
         partitionAlgo.findSubPartition(ba, bb);
     }
 
@@ -62,7 +62,7 @@ public class PartitionAlgoTest {
         b.add("4");
         Block bb = new Block(b);
 
-        PartitionAlgo partitionAlgo = new PartitionAlgo(null);
+        PartitionAlgo partitionAlgo = new PartitionAlgo(null, null);
         partitionAlgo.findSubPartition(ba, bb);
     }
 
@@ -80,7 +80,7 @@ public class PartitionAlgoTest {
         b.add("2");
         Block bb = new Block(b);
 
-        PartitionAlgo partitionAlgo = new PartitionAlgo(null);
+        PartitionAlgo partitionAlgo = new PartitionAlgo(null, null);
         partitionAlgo.findSubPartition(ba, bb);
     }
 
@@ -108,7 +108,7 @@ public class PartitionAlgoTest {
         b.add("4");
         Block bb = new Block(b);
 
-        PartitionAlgo partitionAlgo = new PartitionAlgo(null);
+        PartitionAlgo partitionAlgo = new PartitionAlgo(null, null);
         p = partitionAlgo.doPartition(p, bb);
         Assert.assertEquals(4, p.getBlocks().size());
     }

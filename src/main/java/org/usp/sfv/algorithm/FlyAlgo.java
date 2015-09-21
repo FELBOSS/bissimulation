@@ -17,45 +17,65 @@ public class FlyAlgo {
 
     private Process p1 = null;
     private Process p2 = null;
-    //private PartitionTuple partition = null;
 
 
     public FlyAlgo(Process p1, Process p2) {
         this.p1 = p1;
         this.p2 = p2;
-
-        //Initialize partition with tuple composed by all states of both process
-
     }
 
-    public void calculate() {
+    public boolean calculate() {
 
-        PartitionTuple partition = new PartitionTuple();;
+        //Initialize partition with tuple composed by all states of both process
+        PartitionTuple partition = new PartitionTuple();
         Tuple tuple = new Tuple(new Block(p1.getStates()), new Block(p2.getStates()));
         partition.addTuple(tuple);
 
-        for(String event: p1.getEvents()) {
-            System.out.println("calculate for event="+event);
+        try {
+            partition = doRefinement(partition, p1.getEvents());
+        }
+        catch (Exception e) {
+            return false;
+        }
 
-            //Find states where event is an outgoing edge
-            Block fromStates1 = new Block(p1.getEventFromMap().get(event));
-            Block fromStates2 = new Block(p2.getEventFromMap().get(event));
+        PartitionTuple partitionNotChecked = partition;
 
+        try {
+            partition = doRefinement(partition, p1.getEvents());
+        }
+        catch (Exception e) {
+            return false;
+        }
+
+        System.out.println("FINAL partitionChecked    ="+partition);
+        System.out.println("FINAL partitionNotChecked ="+partitionNotChecked);
+
+        System.out.println("RESULT=TRUE, EQUIVALENTS");
+        return  true;
+    }
+
+    private PartitionTuple doRefinement(PartitionTuple partition, Set<String> events) throws Exception {
+        for(String event: events) {
 
             try {
-                partition = doPartition(partition, fromStates1, fromStates2);
+                partition = doPartition(partition, event);
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
-                return;
+                System.out.println("RESULT=FALSE, NOT EQUIVALENTS");
+                throw e;
             }
-            System.out.println("calculate after event="+event+" partition=" + partition);
+            System.out.println("calculate after event=" + event + " partition=" + partition);
         }
-        System.out.println("RESULT=TRUE, PROCESS EQUIVALENTS");
-        System.out.println("----- ALGORITHM END");
+        return partition;
     }
 
-    private PartitionTuple doPartition(PartitionTuple partition, Block fromStates1, Block fromStates2) throws Exception {
+    private PartitionTuple doPartition(PartitionTuple partition, String event) throws Exception {
+        System.out.println("doPartition for event="+event);
+
+        //Find states where event is an outgoing edge
+        Block fromStates1 = new Block(p1.getEventFromMap().get(event));
+        Block fromStates2 = new Block(p2.getEventFromMap().get(event));
 
         PartitionTuple newPartition = new PartitionTuple();
         for(Tuple tuple: partition.getTuples()) {
@@ -66,7 +86,7 @@ public class FlyAlgo {
             Tuple noEdge = new Tuple(booleanTuple1.getB2(), booleanTuple2.getB2());
 
             if(!isEquivalent(hasEdge) || !isEquivalent(noEdge)){
-                throw new Exception("RESULT=FAlSE, PROCESS NOT EQUIVALENTS");
+                throw new Exception("Not Equivalent at step partition="+partition + " fromStates1="+fromStates1 + " fromStates2="+fromStates2);
             }
             newPartition.addTuple(hasEdge);
             newPartition.addTuple(noEdge);
@@ -80,22 +100,6 @@ public class FlyAlgo {
         }
         return false;
     }
-    //    public Partition doPartition(Partition partition, Block fromStates) {
-//        Partition newPartition = new Partition();
-//        for(Block block: partition.getBlocks()) {
-//            Partition subPartition = findSubPartition(block, fromStates);
-//            newPartition.addBlocks(subPartition.getBlocks());
-//            if(subPartition.getBlocks().size()>1){
-//                subPartition.addBlock(block);
-//                W.add(subPartition);
-//                System.out.println("SPLIT W=" + W);
-//            }
-//        }
-//
-//        System.out.println("doPartition partition=" + partition + "fromStates="+fromStates + " newPartition="+newPartition);
-//
-//        return newPartition;
-//    }
 
     /**
      * Block b1 contains states of block a present block b
