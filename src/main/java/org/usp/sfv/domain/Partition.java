@@ -21,8 +21,17 @@ public class Partition {
     }
 
     public void addBlock(Block block) {
+        if(block.getStates().isEmpty())
+            return;
         this.blocks.add(block);
     }
+
+    public void addBlocks(Set<Block> blocks) {
+        for(Block b: blocks) {
+            addBlock(b);
+        }
+    }
+
 
     @Override
     public String toString() {

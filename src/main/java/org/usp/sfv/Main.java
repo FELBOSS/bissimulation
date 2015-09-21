@@ -1,8 +1,8 @@
 package org.usp.sfv;
 
+import org.usp.sfv.algorithm.PartitionAlgo;
 import org.usp.sfv.domain.Process;
 import org.usp.sfv.reader.LTSReader;
-import org.usp.sfv.algorithm.PartitionAlgo;
 
 /**
  * App: bissimulation
@@ -11,15 +11,17 @@ import org.usp.sfv.algorithm.PartitionAlgo;
  */
 public class Main {
 
-    private static final String LTS_FILE = "lts/p1.txt";
+    private static final String LTS_FILE = "lts/exemplo.txt";
 
     public static void main(String[] args) throws Exception {
         System.out.println("Bissimulation Start");
 
         Process p1 = LTSReader.getInstance().read(LTS_FILE);
-        PartitionAlgo.getInstance().calculate(p1);
+        PartitionAlgo partitionAlgo = new PartitionAlgo(p1);
+        partitionAlgo.calculate();
 
         System.out.println("Bissimulation Ended");
+
 
     }
 
