@@ -2,7 +2,7 @@ package org.usp.sfv;
 
 import org.usp.sfv.domain.Process;
 import org.usp.sfv.reader.LTSReader;
-import org.usp.sfv.reader.PartitionAlgo;
+import org.usp.sfv.algorithm.PartitionAlgo;
 
 /**
  * App: bissimulation

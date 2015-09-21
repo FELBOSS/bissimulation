@@ -1,4 +1,4 @@
-package org.usp.sfv.reader;
+package org.usp.sfv.algorithm;
 
 import org.usp.sfv.domain.*;
 import org.usp.sfv.domain.Process;
