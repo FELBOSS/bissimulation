@@ -3,10 +3,8 @@ package org.usp.sfv.reader;
 import org.usp.sfv.domain.Process;
 import org.usp.sfv.domain.Transition;
 
-import java.io.IOException;
-import java.net.URI;
+import java.io.*;
 import java.net.URISyntaxException;
-import java.nio.file.*;
 import java.util.stream.Stream;
 
 /**
@@ -30,21 +28,26 @@ public class LTSReader {
     private LTSReader() {
     }
 
-    public Process read(String fileName) throws URISyntaxException {
-        URI file = ClassLoader.getSystemResource(fileName).toURI();
-        Path path = Paths.get(file);
+
+    public Process read(String fileName) throws URISyntaxException, IOException {
+        System.out.println("Reading file=" + fileName);
+
+        InputStream is = ClassLoader.getSystemResourceAsStream(fileName);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
         try {
-            Stream<String> lines = Files.lines(path);
+            Stream<String> lines =  br.lines();
             Process process = new Process();
             lines.forEach(s -> process.addTransition(readLine(s)));
-            System.out.println("PROCESS="+process);
+            System.out.println("File converted to process=" + process);
             return process;
         }
-        catch (IOException ex) {
-            System.out.println("Error when reading the file="+fileName);
+        catch (Exception ex) {
+            System.out.println("Error when reading the file=" + fileName);
         }
         return null;
     }
+
 
     private Transition readLine(String line) {
         String[] pieces = line.split(SEPARATOR);

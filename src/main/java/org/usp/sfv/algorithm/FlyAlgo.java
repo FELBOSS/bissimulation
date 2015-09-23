@@ -5,7 +5,6 @@ import org.usp.sfv.domain.Process;
 import org.usp.sfv.domain.fly.PartitionTuple;
 import org.usp.sfv.domain.fly.Tuple;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -13,15 +12,10 @@ import java.util.Set;
  * User: caiobos
  * Date: 9/14/15
  */
-public class FlyAlgo {
-
-    private Process p1 = null;
-    private Process p2 = null;
-
+public class FlyAlgo extends Algo {
 
     public FlyAlgo(Process p1, Process p2) {
-        this.p1 = p1;
-        this.p2 = p2;
+        super(p1, p2);
     }
 
     public boolean calculate() {
@@ -39,6 +33,7 @@ public class FlyAlgo {
         }
 
         PartitionTuple partitionNotChecked = partition;
+        System.out.println("All partitions done! Now we have to check if this is the stable partition="+partition);
 
         try {
             partition = doRefinement(partition, p1.getEvents());
@@ -50,7 +45,7 @@ public class FlyAlgo {
         System.out.println("FINAL partitionChecked    ="+partition);
         System.out.println("FINAL partitionNotChecked ="+partitionNotChecked);
 
-        System.out.println("RESULT=TRUE, EQUIVALENTS");
+        System.out.println("RESULT=TRUE, THEY ARE EQUIVALENTS");
         return  true;
     }
 
@@ -71,7 +66,7 @@ public class FlyAlgo {
     }
 
     private PartitionTuple doPartition(PartitionTuple partition, String event) throws Exception {
-        System.out.println("doPartition for event="+event);
+        System.out.println("Do partition for event="+event);
 
         //Find states where event is an outgoing edge
         Block fromStates1 = new Block(p1.getEventFromMap().get(event));
@@ -79,11 +74,17 @@ public class FlyAlgo {
 
         PartitionTuple newPartition = new PartitionTuple();
         for(Tuple tuple: partition.getTuples()) {
-            Tuple booleanTuple1 = findBlocksDiff(tuple.getB1(), fromStates1);
-            Tuple booleanTuple2 = findBlocksDiff(tuple.getB2(), fromStates2);
+            Tuple edgeTuple1 = findBlocksDiff(tuple.getB1(), fromStates1);
+            Tuple edgeTuple2 = findBlocksDiff(tuple.getB2(), fromStates2);
 
-            Tuple hasEdge = new Tuple(booleanTuple1.getB1(), booleanTuple2.getB1());
-            Tuple noEdge = new Tuple(booleanTuple1.getB2(), booleanTuple2.getB2());
+            System.out.println("(P1) states outgoing="+fromStates1+" block=" + tuple.getB1() + " hasEdge=" + edgeTuple1.getB1() + " noEdge=" +
+                edgeTuple1.getB2());
+
+            System.out.println("(P2) states outgoing="+fromStates2+" block=" + tuple.getB2() + " hasEdge=" + edgeTuple2.getB1() + " noEdge=" +
+                edgeTuple2.getB2());
+
+            Tuple hasEdge = new Tuple(edgeTuple1.getB1(), edgeTuple2.getB1());
+            Tuple noEdge = new Tuple(edgeTuple1.getB2(), edgeTuple2.getB2());
 
             if(!isEquivalent(hasEdge) || !isEquivalent(noEdge)){
                 throw new Exception("Not Equivalent at step partition="+partition + " fromStates1="+fromStates1 + " fromStates2="+fromStates2);
@@ -109,15 +110,8 @@ public class FlyAlgo {
         Block c1 = findComplement(a, b);
         Block c2 = findComplement(a, c1);
         Tuple tuple = new Tuple(c2, c1);
-        System.out.println("findBlocksDiff a=" + a + " b=" + b+ " tuple="+tuple);
+        //System.out.println("findBlocksDiff a=" + a + " b=" + b + " tuple=" + tuple);
         return tuple;
-    }
-
-    public Block findComplement(Block a, Block b){
-        Set<String> complement = new HashSet<>(a.getStates());
-        complement.removeAll(b.getStates());
-        //System.out.println("findComplement a=" + a + " b=" + b+ " complement="+complement);
-        return new Block(complement);
     }
 
 }
